@@ -21,37 +21,50 @@ struct ContentView: View {
     @State var streak: Int = 0
     // True when user has made an incorrect guess, false otherwise.
     @State var incorrectGuess: Bool = false
-    @State var blanks: String = ""
     
     @State var allGuesses: [String] = []
     
+    @State var incorrectGuesses: [String] = []
+    
+    @State var imageList: [String] = [
+            "Screenshot 2023-04-21 at 4.12.09 PM",
+            "Screenshot 2023-04-21 at 4.02.47 PM",
+            "Screenshot 2023-04-21 at 4.03.03 PM",
+            "Screenshot 2023-04-21 at 4.03.51 PM",
+            "Screenshot 2023-04-21 at 4.04.21 PM",
+            "Screenshot 2023-04-21 at 4.04.31 PM",
+            "Screenshot 2023-04-21 at 4.04.42 PM",
+            "Screenshot 2023-04-21 at 4.05.14 PM"
+    ]
+    
+    @State var imageIndex = 0
+    
     // Colors!
-    let lightBlue = Color(red: 135/255, green: 206/255, blue: 250/255)
-    let lavender = Color(red: 220/255, green: 208/255, blue: 255/255)
+    let lightBlue = Color(red: 145/255, green: 176/255, blue: 205/255)
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [lightBlue, lavender, .orange]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [lightBlue]), startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
             // VStack in foreground
             VStack {
-//                Text(generateHint(input: dogBreed))
                 Text(newText(input: dogBreed, letter: user_guess, allGuesses: allGuesses))
                     .padding()
                 
                 // Ansyncronously loads an image from the URL.
-                AsyncImage(url: URL(string: imageURL)) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 256, height: 256)
-                            .clipShape(RoundedRectangle(cornerRadius: 25))
-                    } else {
-                        ProgressView()
-                    }
-                }
-                .frame(width: 256, height: 256)
+//                AsyncImage(url: URL(string: imageURL)) { phase in
+//                    if let image = phase.image {
+//                        image
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                            .frame(width: 256, height: 256)
+//                            .clipShape(RoundedRectangle(cornerRadius: 25))
+//                    } else {
+//                        ProgressView()
+//                    }
+//                }
+//                .frame(width: 256, height: 256)
+                Image(imageList[imageIndex]).resizable().scaledToFit()
                 
                 Button("Guess a letter") {
                     if (dogBreed.lowercased().contains(user_guess.lowercased())) {
@@ -64,6 +77,7 @@ struct ContentView: View {
 //                            user_guess = ""
 //                        }
                     } else {
+                        imageIndex += 1
                         incorrectGuess.toggle()
                     }
                     user_guess = ""
@@ -105,6 +119,7 @@ struct ContentView: View {
 //                                user_guess = ""
 //                            }
                         } else {
+                            imageIndex += 1
                             incorrectGuess.toggle()
                         }
                         user_guess = ""
