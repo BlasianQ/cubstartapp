@@ -36,7 +36,8 @@ struct ContentView: View {
             // VStack in foreground
             VStack {
 //                Text(generateHint(input: dogBreed))
-                Text(newText(input: dogBreed, letter: user_guess))
+                Text(newText(input: dogBreed, letter: user_guess, allGuesses: allGuesses))
+                    .padding()
                 
                 // Ansyncronously loads an image from the URL.
                 AsyncImage(url: URL(string: imageURL)) { phase in
@@ -95,13 +96,14 @@ struct ContentView: View {
                     .onSubmit {
                         // TODO: Part 3b - Guess submission logic.
                         if (dogBreed.lowercased().contains(user_guess.lowercased())) {
-                            Task {
-                                // Hint: You should be fetching a new doggy here!
-                                let newPup = await fetchDoggy()
-                                imageURL = newPup.message
-                                dogBreed = getDogName(imageURL: imageURL)
-                                user_guess = ""
-                            }
+                            allGuesses.append(user_guess.lowercased())
+//                            Task {
+//                                // Hint: You should be fetching a new doggy here!
+//                                let newPup = await fetchDoggy()
+//                                imageURL = newPup.message
+//                                dogBreed = getDogName(imageURL: imageURL)
+//                                user_guess = ""
+//                            }
                         } else {
                             incorrectGuess.toggle()
                         }
@@ -124,12 +126,12 @@ struct ContentView: View {
     }
 }
 
-func newText(input: String, letter: String) -> String {
+func newText(input: String, letter: String, allGuesses: [String]) -> String {
     var result = ""
     
-    for val in input {
-        if String(val) == letter {
-            result.append(letter)
+    for char in input {
+        if allGuesses.contains(String(char)) {
+            result.append(String(char))
         } else {
             result.append("_ ")
         }
