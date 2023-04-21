@@ -23,21 +23,21 @@ struct ContentView: View {
     @State var incorrectGuess: Bool = false
     @State var blanks: String = ""
     
+    @State var allGuesses: [String] = []
+    
     // Colors!
     let lightBlue = Color(red: 135/255, green: 206/255, blue: 250/255)
     let lavender = Color(red: 220/255, green: 208/255, blue: 255/255)
     
     var body: some View {
         ZStack {
-            // TODO: Part 1a - Linear Gradient Background.
             LinearGradient(gradient: Gradient(colors: [lightBlue, lavender, .orange]), startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
             // VStack in foreground
             VStack {
-                // TODO: Part 1b -
-                Text(generateHint(input: dogBreed))
-                    .padding()
-                // TODO: PART 3a - Replace the hardcoded string URL with the imageURL.
+//                Text(generateHint(input: dogBreed))
+                Text(newText(input: dogBreed, letter: user_guess))
+                
                 // Ansyncronously loads an image from the URL.
                 AsyncImage(url: URL(string: imageURL)) { phase in
                     if let image = phase.image {
@@ -52,29 +52,16 @@ struct ContentView: View {
                 }
                 .frame(width: 256, height: 256)
                 
-                // TODO: PART 1b - Display the generated hint.
-//                Text(generateHint(input: dogBreed))
                 Button("Guess a letter") {
                     if (dogBreed.lowercased().contains(user_guess.lowercased())) {
-                        streak += 1
-                        if (streak > best_streak) {
-                            best_streak = streak
-                        }
-                        var result = ""
-                        for char in dogBreed.lowercased(){
-                            if char == Character(user_guess.lowercased()) {
-                                result.append(user_guess.lowercased())
-                            } else {
-                                result.append("_ ")
-                            }
-                        }
-                        Task {
-                            // Hint: You should be fetching a new doggy here!
-                            let newPup = await fetchDoggy()
-                            imageURL = newPup.message
-                            dogBreed = getDogName(imageURL: imageURL)
-                            user_guess = ""
-                        }
+                        allGuesses.append(user_guess.lowercased())
+//                        Task {
+//                            // Hint: You should be fetching a new doggy here!
+//                            let newPup = await fetchDoggy()
+//                            imageURL = newPup.message
+//                            dogBreed = getDogName(imageURL: imageURL)
+//                            user_guess = ""
+//                        }
                     } else {
                         incorrectGuess.toggle()
                     }
@@ -84,20 +71,20 @@ struct ContentView: View {
                 .foregroundColor(.blue)
                 // TODO: Part 3b - Guess submission logic in Button. Hint: Should be exact same as TextField.onSubmit{ }.
                 // TODO: Part 3c - Incorrect guess alert (attached to submit guess button).
-                .alert("Wrong dog", isPresented: $incorrectGuess) {
-                    Button("Play again", role: .cancel) {
-                        streak = 0
-                        Task {
-                            // Hint: You should be fetching a new doggy here!
-                            let newPup = await fetchDoggy()
-                            imageURL = newPup.message
-                            dogBreed = getDogName(imageURL: imageURL)
-                            user_guess = ""
-                        }
-                    }
-                } message: {
-                    Text("Incorrect guess! \n Correct answer: \(dogBreed)")
-                }
+//                .alert("Wrong dog", isPresented: $incorrectGuess) {
+//                    Button("Play again", role: .cancel) {
+//                        streak = 0
+//                        Task {
+//                            // Hint: You should be fetching a new doggy here!
+//                            let newPup = await fetchDoggy()
+//                            imageURL = newPup.message
+//                            dogBreed = getDogName(imageURL: imageURL)
+//                            user_guess = ""
+//                        }
+//                    }
+//                } message: {
+//                    Text("Incorrect guess! \n Correct answer: \(dogBreed)")
+//                }
 
                 
                 TextField("", text: $user_guess)
@@ -135,6 +122,19 @@ struct ContentView: View {
             }
         }
     }
+}
+
+func newText(input: String, letter: String) -> String {
+    var result = ""
+    
+    for val in input {
+        if String(val) == letter {
+            result.append(letter)
+        } else {
+            result.append("_ ")
+        }
+    }
+    return result
 }
 
 struct ContentView_Previews: PreviewProvider {

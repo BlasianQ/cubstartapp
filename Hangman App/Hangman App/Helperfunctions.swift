@@ -48,16 +48,3 @@ func generateHint(input: String) -> String {
     return hintString
 }
 
-func udpateTextField(input: String, letter: Character) -> String {
-    var result = ""
-
-    for char in input {
-        if char == letter {
-            result.append(letter)
-        } else {
-            result.append("_ ")
-        }
-    }
-    return result
-}
-
