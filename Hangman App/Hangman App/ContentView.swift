@@ -67,23 +67,29 @@ struct ContentView: View {
                 Image(imageList[imageIndex]).resizable().scaledToFit()
                 
                 Button("Guess a letter") {
-                    if (dogBreed.lowercased().contains(user_guess.lowercased())) {
-                        allGuesses.append(user_guess.lowercased())
-//                        Task {
-//                            // Hint: You should be fetching a new doggy here!
-//                            let newPup = await fetchDoggy()
-//                            imageURL = newPup.message
-//                            dogBreed = getDogName(imageURL: imageURL)
-//                            user_guess = ""
-//                        }
-                    } else {
-                        imageIndex += 1
-                        incorrectGuess.toggle()
+                    if user_guess.count == 1 {
+                        if allGuesses.contains(user_guess.lowercased()){
+                        }
+                        else if (dogBreed.lowercased().contains(user_guess.lowercased())) {
+                            allGuesses.append(user_guess.lowercased())
+                            //                        Task {
+                            //                            // Hint: You should be fetching a new doggy here!
+                            //                            let newPup = await fetchDoggy()
+                            //                            imageURL = newPup.message
+                            //                            dogBreed = getDogName(imageURL: imageURL)
+                            //                            user_guess = ""
+                            //                        }
+                        } else {
+                            allGuesses.append(user_guess.lowercased())
+                            imageIndex += 1
+                            incorrectGuess.toggle()
+                        }
+                        user_guess = ""
                     }
-                    user_guess = ""
                 }
                 .padding()
                 .foregroundColor(.blue)
+                
                 // TODO: Part 3b - Guess submission logic in Button. Hint: Should be exact same as TextField.onSubmit{ }.
                 // TODO: Part 3c - Incorrect guess alert (attached to submit guess button).
 //                .alert("Wrong dog", isPresented: $incorrectGuess) {
@@ -109,27 +115,60 @@ struct ContentView: View {
                     .padding(.horizontal, 50)
                     .onSubmit {
                         // TODO: Part 3b - Guess submission logic.
-                        if (dogBreed.lowercased().contains(user_guess.lowercased())) {
-                            allGuesses.append(user_guess.lowercased())
-//                            Task {
-//                                // Hint: You should be fetching a new doggy here!
-//                                let newPup = await fetchDoggy()
-//                                imageURL = newPup.message
-//                                dogBreed = getDogName(imageURL: imageURL)
-//                                user_guess = ""
-//                            }
-                        } else {
-                            imageIndex += 1
-                            incorrectGuess.toggle()
+                        if user_guess.count == 1 {
+                            if allGuesses.contains(user_guess.lowercased()){
+                            }
+                            else if (dogBreed.lowercased().contains(user_guess.lowercased())) {
+                                allGuesses.append(user_guess.lowercased())
+                                print(allGuesses)
+                                //                            Task {
+                                //                                // Hint: You should be fetching a new doggy here!
+                                //                                let newPup = await fetchDoggy()
+                                //                                imageURL = newPup.message
+                                //                                dogBreed = getDogName(imageURL: imageURL)
+                                //                                user_guess = ""
+                                //                            }
+                            } else {
+                                allGuesses.append(user_guess.lowercased())
+                                imageIndex += 1
+                                incorrectGuesses.append(user_guess.lowercased())
+                                incorrectGuess.toggle()
+                            }
+                            user_guess = ""
                         }
-                        user_guess = ""
-                                            }
+                    }
                 
                 // TODO: Part 1b - Submit Guess Button.
                 
+                if newText(input: dogBreed, letter: user_guess, allGuesses: allGuesses) == dogBreed {
+                    Text("YOU WON!").font(.system(size: 28))
+                        .bold().foregroundColor(.green)
+                } else if imageIndex == $imageList.count - 1 {
+                    Text("YOU LOST.").font(.system(size: 28))
+                        .bold().foregroundColor(.red)
+                }
                 
+
                 // Answer for debugging/testing purposes.
                 Text("\(dogBreed)")
+                    .padding()
+                HStack {
+                    Text("Incorrect Letters:                                  ")
+                        .padding()
+                }
+                
+                Text(wrongLetters(incorrectGuesses: incorrectGuesses))
+                
+                Spacer()
+                
+                Button("RETRY") {
+                    dogBreed = "hi"
+                    user_guess = ""
+                    allGuesses = []
+                    incorrectGuesses = []
+                    imageIndex = 0
+                }.font(.system(size: 28)).foregroundColor(.black).bold()
+                
             }
             .task {
                 // TODO: Part 3a - Fetch a doggy upon loading the app.
@@ -153,6 +192,17 @@ func newText(input: String, letter: String, allGuesses: [String]) -> String {
     }
     return result
 }
+
+func wrongLetters(incorrectGuesses: [String]) -> String {
+    var result = ""
+    for letter in incorrectGuesses {
+        result.append(String(letter))
+        result.append(" ")
+    }
+    return result
+}
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

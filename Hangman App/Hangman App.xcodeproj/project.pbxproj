@@ -18,6 +18,8 @@
 		7117E3A129F0BF7600D582D0 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7117E3A029F0BF7600D582D0 /* Api.swift */; };
 		7117E3A329F0C10100D582D0 /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7117E3A229F0C10100D582D0 /* Dog.swift */; };
 		7117E3A529F0C12000D582D0 /* Helperfunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7117E3A429F0C12000D582D0 /* Helperfunctions.swift */; };
+		7117ED9129F35F5E00F9B439 /* LoseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7117ED9029F35F5E00F9B439 /* LoseView.swift */; };
+		7117ED9329F35F9600F9B439 /* WinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7117ED9229F35F9600F9B439 /* WinView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		7117E3A029F0BF7600D582D0 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		7117E3A229F0C10100D582D0 /* Dog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 		7117E3A429F0C12000D582D0 /* Helperfunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helperfunctions.swift; sourceTree = "<group>"; };
+		7117ED9029F35F5E00F9B439 /* LoseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoseView.swift; sourceTree = "<group>"; };
+		7117ED9229F35F9600F9B439 /* WinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +114,8 @@
 				7117E3A229F0C10100D582D0 /* Dog.swift */,
 				7117E37829F0B78D00D582D0 /* Assets.xcassets */,
 				7117E37A29F0B78D00D582D0 /* Preview Content */,
+				7117ED9029F35F5E00F9B439 /* LoseView.swift */,
+				7117ED9229F35F9600F9B439 /* WinView.swift */,
 			);
 			path = "Hangman App";
 			sourceTree = "<group>";
@@ -270,11 +276,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7117E37729F0B78900D582D0 /* ContentView.swift in Sources */,
+				7117ED9329F35F9600F9B439 /* WinView.swift in Sources */,
 				7117E37529F0B78900D582D0 /* Hangman_AppApp.swift in Sources */,
 				7117E3A129F0BF7600D582D0 /* Api.swift in Sources */,
 				7117E3A329F0C10100D582D0 /* Dog.swift in Sources */,
 				7117E39F29F0BD3300D582D0 /* Hangman_logic.swift in Sources */,
 				7117E3A529F0C12000D582D0 /* Helperfunctions.swift in Sources */,
+				7117ED9129F35F5E00F9B439 /* LoseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
