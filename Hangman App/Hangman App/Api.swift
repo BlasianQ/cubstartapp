@@ -15,7 +15,7 @@ import Foundation
  */
 func fetchDog() async -> Dog? {
     // TODO: Part 2b - Create url object.
-    guard let url = URL(string: "https://dog.ceo/api/breeds/image/random") else {
+    guard let url = URL(string: "https://api.api-ninjas.com/v1/randomword") else {
         return nil
     }
     
@@ -32,6 +32,7 @@ func fetchDog() async -> Dog? {
         return nil
     }
     return nil
+    
 }
 
 

@@ -51,19 +51,6 @@ struct ContentView: View {
                 Text(newText(input: dogBreed, letter: user_guess, allGuesses: allGuesses))
                     .padding()
                 
-                // Ansyncronously loads an image from the URL.
-//                AsyncImage(url: URL(string: imageURL)) { phase in
-//                    if let image = phase.image {
-//                        image
-//                            .resizable()
-//                            .aspectRatio(contentMode: .fill)
-//                            .frame(width: 256, height: 256)
-//                            .clipShape(RoundedRectangle(cornerRadius: 25))
-//                    } else {
-//                        ProgressView()
-//                    }
-//                }
-//                .frame(width: 256, height: 256)
                 Image(imageList[imageIndex]).resizable().scaledToFit()
                 
                 Button("Guess a letter") {
@@ -72,13 +59,6 @@ struct ContentView: View {
                         }
                         else if (dogBreed.lowercased().contains(user_guess.lowercased())) {
                             allGuesses.append(user_guess.lowercased())
-                            //                        Task {
-                            //                            // Hint: You should be fetching a new doggy here!
-                            //                            let newPup = await fetchDoggy()
-                            //                            imageURL = newPup.message
-                            //                            dogBreed = getDogName(imageURL: imageURL)
-                            //                            user_guess = ""
-                            //                        }
                         } else {
                             allGuesses.append(user_guess.lowercased())
                             imageIndex += 1
@@ -89,24 +69,6 @@ struct ContentView: View {
                 }
                 .padding()
                 .foregroundColor(.blue)
-                
-                // TODO: Part 3b - Guess submission logic in Button. Hint: Should be exact same as TextField.onSubmit{ }.
-                // TODO: Part 3c - Incorrect guess alert (attached to submit guess button).
-//                .alert("Wrong dog", isPresented: $incorrectGuess) {
-//                    Button("Play again", role: .cancel) {
-//                        streak = 0
-//                        Task {
-//                            // Hint: You should be fetching a new doggy here!
-//                            let newPup = await fetchDoggy()
-//                            imageURL = newPup.message
-//                            dogBreed = getDogName(imageURL: imageURL)
-//                            user_guess = ""
-//                        }
-//                    }
-//                } message: {
-//                    Text("Incorrect guess! \n Correct answer: \(dogBreed)")
-//                }
-
                 
                 TextField("", text: $user_guess)
                     .disableAutocorrection(true)
@@ -121,13 +83,6 @@ struct ContentView: View {
                             else if (dogBreed.lowercased().contains(user_guess.lowercased())) {
                                 allGuesses.append(user_guess.lowercased())
                                 print(allGuesses)
-                                //                            Task {
-                                //                                // Hint: You should be fetching a new doggy here!
-                                //                                let newPup = await fetchDoggy()
-                                //                                imageURL = newPup.message
-                                //                                dogBreed = getDogName(imageURL: imageURL)
-                                //                                user_guess = ""
-                                //                            }
                             } else {
                                 allGuesses.append(user_guess.lowercased())
                                 imageIndex += 1
@@ -148,7 +103,6 @@ struct ContentView: View {
                         .bold().foregroundColor(.red)
                 }
                 
-
                 // Answer for debugging/testing purposes.
                 Text("\(dogBreed)")
                     .padding()
@@ -157,12 +111,19 @@ struct ContentView: View {
                         .padding()
                 }
                 
+                //Incorrect word Bank
                 Text(wrongLetters(incorrectGuesses: incorrectGuesses))
                 
                 Spacer()
                 
                 Button("RETRY") {
-                    dogBreed = "hi"
+                    do {
+                        dogBreed = try RandomWordGenerator().next()!
+                    }
+                    catch {
+                        dogBreed = ""
+                    }
+                    dogBreed = dogBreed.lowercased()
                     user_guess = ""
                     allGuesses = []
                     incorrectGuesses = []
@@ -172,11 +133,18 @@ struct ContentView: View {
             }
             .task {
                 // TODO: Part 3a - Fetch a doggy upon loading the app.
-                let pup = await fetchDoggy()
-                imageURL = pup.message
-                dogBreed = getDogName(imageURL: imageURL)
+                do {
+                    dogBreed = try RandomWordGenerator().next()!
+                }
+                catch {
+                    dogBreed = ""
+                }
+                dogBreed = dogBreed.lowercased()
             }
+        
+            
         }
+        
     }
 }
 
@@ -196,13 +164,32 @@ func newText(input: String, letter: String, allGuesses: [String]) -> String {
 func wrongLetters(incorrectGuesses: [String]) -> String {
     var result = ""
     for letter in incorrectGuesses {
-        result.append(String(letter))
+        result.append(String(letter).uppercased())
         result.append(" ")
     }
     return result
 }
 
+struct RandomWordGenerator {
+    private let words: [String]
+    
+    func ranged(_ range: ClosedRange<Int>) -> RandomWordGenerator {
+        RandomWordGenerator(words: words.filter { range.contains($0.count) })
+    }
+}
 
+extension RandomWordGenerator: Sequence, IteratorProtocol {
+    public func next() -> String? {
+        words.randomElement()
+    }
+}
+
+extension RandomWordGenerator {
+    init() throws {
+        let file = try String(contentsOf: URL(fileURLWithPath: "/usr/share/dict/words"))
+        self.init(words: file.components(separatedBy: "\n"))
+    }
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
